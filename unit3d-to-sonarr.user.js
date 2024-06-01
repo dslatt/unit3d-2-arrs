@@ -6,8 +6,8 @@
 // @description  Send series to sonarr from UNIT3D trackers
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=unit3d.dev
 // @match        *://fearnopeer.com/*
-// @match        *://hawke.uno/*
 // @match        *://aither.cc/*
+// @match        *://blutopia.cc/*
 // @updateURL    https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2sonarr.user.js
 // @downloadURL  https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2sonarr.user.js
 // @require      https://cdn.jsdelivr.net/gh/sizzlemctwizzle/GM_config@43fd0fe4de1166f343883511e53546e87840aeaf/gm_config.js
@@ -36,16 +36,20 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
   GM_config.init({
     id: "UNIT3DToSonarr",
     title: "UNIT3DToSonarr Settings",
-    css: `#UNIT3DToSonarr {background: #333333; margin: 0; padding: 20px 20px}
-            #UNIT3DToSonarr .field_label {color: #fff; width: 100%;}
-            #UNIT3DToSonarr .config_header {color: #fff; padding-bottom: 10px; font-weight: 100;}
-            #UNIT3DToSonarr .reset {color: #e8d3d3; text-decoration: none;}
-            #UNIT3DToSonarr .config_var {display: flex; flex-direction: row; text-align: left; justify-content: center; align-items: center; width: 85%; margin: 4px auto; padding: 4px 0; border-bottom: 1px solid #7470703d;}
-            #UNIT3DToSonarr_buttons_holder {display: grid; gap: 10px; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; width:85%; height: 100px; margin: 0 auto; text-align: center; align-items: center;}
-            #UNIT3DToSonarr_saveBtn {grid-column:1; grid-row:1; cursor: pointer;}
-            #UNIT3DToSonarr_closeBtn {grid-column:3; grid-row:1; cursor: pointer;}
-            #UNIT3DToSonarr .reset_holder {grid-column:2; grid-row:2}
-            #UNIT3DToSonarr .config_var input[type="checkbox"] {cursor: pointer;}
+    css: `
+        #UNIT3DToSonarr {background: #333333; margin: 0; padding: 20px 20px}
+        #UNIT3DToSonarr .field_label {color: #fff; width: 100%;}
+        #UNIT3DToSonarr .config_header {color: #fff; padding-bottom: 10px; font-weight: 100;}
+        #UNIT3DToSonarr .reset {color: #e8d3d3; text-decoration: none;}
+        #UNIT3DToSonarr .config_var {display: flex; flex-direction: row; text-align: left; justify-content: center; align-items: center; width: 85%; margin: 4px auto; padding: 4px 0; border-bottom: 1px solid #7470703d;}
+        #UNIT3DToSonarr_buttons_holder { display: grid; gap: 4px; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); max-width: 85%; height: 100px; margin: 0 auto; text-align: center; align-items: center;}
+        #UNIT3DToSonarr_saveBtn { grid-column: 1; grid-row: 2;}
+        #UNIT3DToSonarr_closeBtn { grid-column: 2;  grid-row: 2;}
+        #UNIT3DToSonarr_buttons_holder button,#UNIT3DToSonarr_buttons_holder input { cursor: pointer; padding: 2px 5px !important; margin: 0 !important;}
+        #UNIT3DToSonarr .reset_holder { grid-column: 1 / 3;  grid-row: 3;}
+        #UNIT3DToSonarr .config_var input[type="checkbox"] { cursor: pointer;}
+        #UNIT3DToSonarr_field_sonarr_syncbutton { grid-column: 1; grid-row: 1;}
+        #UNIT3DToSonarr_field_sonarr_fetchbutton { grid-column: 2; grid-row: 1;}
             `,
     events: {
       open: function (doc) {
@@ -63,7 +67,10 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         style.right = "6%";
         doc
           .getElementById("UNIT3DToSonarr_buttons_holder")
-          .prepend(doc.getElementById("UNIT3DToSonarr_sonarr_syncbutton_var"));
+          .prepend(
+            doc.getElementById("UNIT3DToSonarr_sonarr_syncbutton_var"),
+            doc.getElementById("UNIT3DToSonarr_sonarr_fetchbutton_var")
+          );
       },
     },
     fields: {
