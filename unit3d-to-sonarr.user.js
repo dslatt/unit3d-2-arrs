@@ -266,7 +266,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       let a = document.querySelector('[href*="://www.themoviedb.org/"]');
       let id = a.href.match(/\.org\/(.*)\//)[1];
       if (id == "tv") {
-        let series = document.querySelector(".request__tags");
+        let series = document.querySelector(".meta__ids");
         buttonBuilder(series, id, "single");
       }
     } else if (current_page_type == "multi") {

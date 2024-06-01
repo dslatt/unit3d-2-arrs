@@ -146,8 +146,8 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       },
       save: function () {
         console.log("Save event triggered");
-        getMainVars()
-        alert("Settings Saved!")
+        getMainVars();
+        alert("Settings Saved!");
       },
     },
   });
@@ -271,7 +271,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       let a = document.querySelector('[href*="://www.themoviedb.org/"]');
       let id = a.href.match(/\.org\/(.*)\//)[1];
       if (id == "movie") {
-        let movies = document.querySelector(".request__tags");
+        let movies = document.querySelector(".meta__ids");
         buttonBuilder(movies, id, "single");
       }
     } else if (current_page_type == "multi") {
