@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         UNIT3D-to-Radarr
-// @version      0.1
+// @version      0.2
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send movies to radarr from UNIT3D trackers
@@ -231,7 +231,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     button.addEventListener(
       "click",
       function () {
-        GM.openInTab(radarrUrl.concat("/movies/", titleSlug), "active");
+        GM.openInTab(radarrUrl.concat("/movie/", titleSlug), "active");
       },
       false
     );
@@ -363,7 +363,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         "click",
         function () {
           GM.openInTab(
-            radarrUrl.concat("/movies/", exists[0].titleSlug),
+            radarrUrl.concat("/movie/", exists[0].titleSlug),
             "active"
           );
         },
@@ -569,7 +569,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         const responseJSON = JSON.parse(response.responseText);
         if (response.status == 200) {
           GM.setValue("existing_movies", JSON.stringify(responseJSON));
-          console.log(responseJSON);
           let timestamp = +new Date();
           GM.setValue("last_sync_timestamp", timestamp);
           console.log(
@@ -588,7 +587,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
             timeout: 4000,
           });
         } else {
-          console.log(responseJSON, response.status, response.status == 200);
           GM.notification({
             text: `Error: ${response.status}`,
             title: "UNIT3DToRadarr",
@@ -670,8 +668,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
           }
           responseJSON = JSON.parse(response.responseText);
           if (responseJSON.length > 0) {
-            console.log(responseJSON[0], imdbid);
-            add_movies(responseJSON[0], imdbid);
+            add_movie(responseJSON[0], imdbid);
             return responseJSON[0];
           } else {
             console.log("movies not found");
@@ -689,7 +686,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       });
   }
 
-  function add_movies(movies, imdbid) {
+  function add_movie(movies, imdbid) {
     movies.monitored = monitored;
     movies.qualityProfileId = qualityProfile;
     movies.rootFolderPath = rootPath;
@@ -706,7 +703,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       .then((response) => {
         const responseJSON = JSON.parse(response.responseText);
         let button = document.getElementById("UNIT3DToRadarr-" + imdbid);
-        console.log(responseJSON);
         if (response.status == 201) {
           clickswap(imdbid, responseJSON.titleSlug);
           GM.notification({

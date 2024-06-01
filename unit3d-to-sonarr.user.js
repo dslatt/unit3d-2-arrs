@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         UNIT3D-to-Sonarr
-// @version      0.1
+// @version      0.2
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send series to sonarr from UNIT3D trackers
@@ -564,7 +564,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         const responseJSON = JSON.parse(response.responseText);
         if (response.status == 200) {
           GM.setValue("existing_seriess", JSON.stringify(responseJSON));
-          console.log(responseJSON);
           let timestamp = +new Date();
           GM.setValue("last_sync_timestamp", timestamp);
           console.log(
@@ -583,7 +582,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
             timeout: 4000,
           });
         } else {
-          console.log(responseJSON);
           GM.notification({
             text: `Error: ${response.status}`,
             title: "UNIT3DToSonarr",
@@ -665,7 +663,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
           }
           responseJSON = JSON.parse(response.responseText);
           if (responseJSON.length > 0) {
-            console.log(responseJSON[0], imdbid);
             add_series(responseJSON[0], imdbid);
             return responseJSON[0];
           } else {
@@ -701,7 +698,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
       .then((response) => {
         const responseJSON = JSON.parse(response.responseText);
         let button = document.getElementById("UNIT3DToSonarr-" + imdbid);
-        console.log(responseJSON);
         if (response.status == 201) {
           clickswap(imdbid, responseJSON.titleSlug);
           GM.notification({
