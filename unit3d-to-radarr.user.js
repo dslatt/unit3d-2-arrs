@@ -9,8 +9,8 @@
 // @match        *://aither.cc/*
 // @match        *://blutopia.cc/*
 // @match        *://reelflix.xyz/*
-// @updateURL    https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2radarr.user.js
-// @downloadURL  https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2radarr.user.js
+// @updateURL    https://github.com/frenchcutgreenbean/unit3d-2-arrs/raw/main/unit3d-to-radarr.user.js
+// @downloadURL  https://github.com/frenchcutgreenbean/unit3d-2-arrs/raw/main/unit3d-to-radarr.user.js
 // @require      https://cdn.jsdelivr.net/gh/sizzlemctwizzle/GM_config@43fd0fe4de1166f343883511e53546e87840aeaf/gm_config.js
 // @require      https://code.jquery.com/jquery-3.5.1.min.js
 // @grant        GM.xmlHttpRequest
