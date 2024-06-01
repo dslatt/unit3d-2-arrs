@@ -4,10 +4,11 @@
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send movies to radarr from UNIT3D trackers
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=unit3d.dev
+// @icon         https://i.ibb.co/C7f0QDw/svgexport-1-1.png
 // @match        *://fearnopeer.com/*
 // @match        *://aither.cc/*
 // @match        *://blutopia.cc/*
+// @match        *://reelflix.xyz/*
 // @updateURL    https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2radarr.user.js
 // @downloadURL  https://github.com/frenchcutgreenbean/blu2radarr/raw/main/blu2radarr.user.js
 // @require      https://cdn.jsdelivr.net/gh/sizzlemctwizzle/GM_config@43fd0fe4de1166f343883511e53546e87840aeaf/gm_config.js
@@ -31,7 +32,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
 /*jshint esversion: 11 */
 (function () {
   "use strict";
-  const icon = "https://raw.githubusercontent.com/frenchcutgreenbean/unit3d-2-arrs/e8f82be65d23324df9ad89b08bf315c3db3048db/radarr.svg";
+  const icon = "https://svgshare.com/i/16iY.svg";
 
   GM_config.init({
     id: "UNIT3DToRadarr",
@@ -51,28 +52,6 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         #UNIT3DToRadarr_field_radarr_syncbutton { grid-column: 1; grid-row: 1;}
         #UNIT3DToRadarr_field_radarr_fetchbutton { grid-column: 2; grid-row: 1;}
             `,
-    events: {
-      open: function (doc) {
-        const enableAuth = GM_config.fields.enableAuth.node;
-        toggleAuthFields(enableAuth.checked);
-        enableAuth.addEventListener("change", function () {
-          toggleAuthFields(enableAuth.checked);
-        });
-
-        let style = this.frame.style;
-        style.width = "400px";
-        style.height = "515px";
-        style.inset = "";
-        style.top = "6%";
-        style.right = "6%";
-        doc
-          .getElementById("UNIT3DToRadarr_buttons_holder")
-          .prepend(
-            doc.getElementById("UNIT3DToRadarr_radarr_syncbutton_var"),
-            doc.getElementById("UNIT3DToRadarr_radarr_fetchbutton_var")
-          );
-      },
-    },
     fields: {
       radarr_url: {
         label: "Radarr URL",
@@ -116,13 +95,12 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         type: "text",
         default: "/mnt/tv",
       },
-        "radarr_minimumavailability":
-        {
-            "label": "Minimum Availability",
-            "type": "select",
-            "options": ["announced", "inCinemas", "released"],
-            "default": "released"
-        },
+      radarr_minimumavailability: {
+        label: "Minimum Availability",
+        type: "select",
+        options: ["announced", "inCinemas", "released"],
+        default: "released",
+      },
       radarr_searchformovies: {
         label: "Search for movies on request",
         type: "checkbox",
@@ -145,6 +123,33 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         click: fetchQualityProfiles,
       },
     },
+    events: {
+      open: function (doc) {
+        const enableAuth = GM_config.fields.enableAuth.node;
+        toggleAuthFields(enableAuth.checked);
+        enableAuth.addEventListener("change", function () {
+          toggleAuthFields(enableAuth.checked);
+        });
+
+        let style = this.frame.style;
+        style.width = "400px";
+        style.height = "515px";
+        style.inset = "";
+        style.top = "6%";
+        style.right = "6%";
+        doc
+          .getElementById("UNIT3DToRadarr_buttons_holder")
+          .prepend(
+            doc.getElementById("UNIT3DToRadarr_radarr_syncbutton_var"),
+            doc.getElementById("UNIT3DToRadarr_radarr_fetchbutton_var")
+          );
+      },
+      save: function () {
+        console.log("Save event triggered");
+        getMainVars()
+        alert("Settings Saved!")
+      },
+    },
   });
 
   function toggleAuthFields(isAuthEnabled) {
@@ -156,26 +161,42 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
 
   GM.registerMenuCommand("UNIT3DToRadarr Settings", () => GM_config.open());
 
-  // Constant variables based on GM_config settings used across functions.
-  const radarr_apikey = GM_config.get("radarr_apikey");
-  const enableAuth = GM_config.get("enableAuth");
-  const username = GM_config.get("username");
-  const password = GM_config.get("password");
-  const monitored = GM_config.get("radarr_monitored");
-  const radarrUrl = GM_config.get("radarr_url").replace(/\/$/, "");
-  const qualityProfile = GM_config.get("radarr_profileid");
-  const rootPath = GM_config.get("radarr_rootfolderpath");
-  const searchOnAdd = GM_config.get("radarr_searchformovies");
-  const headers = {
-    "X-Api-Key": radarr_apikey,
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
-  // Add basic auth to the headers if enabled.
-  if (enableAuth) {
-    headers["Authorization"] = "Basic " + btoa(username + ":" + password);
+  let radarr_apikey,
+    enableAuth,
+    username,
+    password,
+    monitored,
+    radarrUrl,
+    qualityProfile,
+    rootPath,
+    searchOnAdd,
+    headers;
+
+  // Function to set global MainVars
+  function getMainVars() {
+    // Constant variables based on GM_config settings used across functions.
+    radarr_apikey = GM_config.get("radarr_apikey");
+    enableAuth = GM_config.get("enableAuth");
+    username = GM_config.get("username");
+    password = GM_config.get("password");
+    monitored = GM_config.get("radarr_monitored");
+    radarrUrl = GM_config.get("radarr_url").replace(/\/$/, "");
+    qualityProfile = GM_config.get("radarr_profileid");
+    rootPath = GM_config.get("radarr_rootfolderpath");
+    searchOnAdd = GM_config.get("radarr_searchformovies");
+    headers = {
+      "X-Api-Key": radarr_apikey,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    // Add basic auth to the headers if enabled.
+    if (enableAuth) {
+      headers["Authorization"] = "Basic " + btoa(username + ":" + password);
+    }
   }
 
+  // Call the function to set the MainVars
+  getMainVars();
   let current_page_type = "";
   let oldSelection = undefined;
   const isSimilar = window.location.href.includes("similar");
@@ -238,7 +259,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         '[href*="/torrents?categories%5B0%5D="]'
       );
       let category = catSelector.href.match(/=(\d+)/)[1];
-      if (category === "2") {
+      if (category === "1") {
         let a = document.querySelector('[href*="://www.imdb.com/title/tt"]');
         let id = a.href.match(/tt\d+/)[0];
         let movies = document.querySelector(".meta__ids");
@@ -249,7 +270,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     } else if (current_page_type === "request") {
       let a = document.querySelector('[href*="://www.themoviedb.org/"]');
       let id = a.href.match(/\.org\/(.*)\//)[1];
-      if (id == "tv") {
+      if (id == "movie") {
         let movies = document.querySelector(".request__tags");
         buttonBuilder(movies, id, "single");
       }
@@ -546,8 +567,8 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     })
       .then((response) => {
         const responseJSON = JSON.parse(response.responseText);
-        if (responseJSON.status == 200) {
-          GM.setValue("existing_moviess", JSON.stringify(responseJSON));
+        if (response.status == 200) {
+          GM.setValue("existing_movies", JSON.stringify(responseJSON));
           console.log(responseJSON);
           let timestamp = +new Date();
           GM.setValue("last_sync_timestamp", timestamp);
@@ -567,7 +588,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
             timeout: 4000,
           });
         } else {
-          console.log(responseJSON);
+          console.log(responseJSON, response.status, response.status == 200);
           GM.notification({
             text: `Error: ${response.status}`,
             title: "UNIT3DToRadarr",
@@ -586,7 +607,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
   }
 
   async function check_exists(imdbid) {
-    let moviesliststr = await GM.getValue("existing_moviess", "{}");
+    let moviesliststr = await GM.getValue("existing_movies", "{}");
     let movies_list = JSON.parse(moviesliststr);
     let filter = null;
     try {

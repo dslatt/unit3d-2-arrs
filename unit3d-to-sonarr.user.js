@@ -4,7 +4,7 @@
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send series to sonarr from UNIT3D trackers
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=unit3d.dev
+// @icon         https://i.ibb.co/jvZ2QFH/download-icon-sonarr-1331550893356635526-0.png
 // @match        *://fearnopeer.com/*
 // @match        *://aither.cc/*
 // @match        *://blutopia.cc/*
@@ -51,28 +51,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         #UNIT3DToSonarr_field_sonarr_syncbutton { grid-column: 1; grid-row: 1;}
         #UNIT3DToSonarr_field_sonarr_fetchbutton { grid-column: 2; grid-row: 1;}
             `,
-    events: {
-      open: function (doc) {
-        const enableAuth = GM_config.fields.enableAuth.node;
-        toggleAuthFields(enableAuth.checked);
-        enableAuth.addEventListener("change", function () {
-          toggleAuthFields(enableAuth.checked);
-        });
 
-        let style = this.frame.style;
-        style.width = "400px";
-        style.height = "515px";
-        style.inset = "";
-        style.top = "6%";
-        style.right = "6%";
-        doc
-          .getElementById("UNIT3DToSonarr_buttons_holder")
-          .prepend(
-            doc.getElementById("UNIT3DToSonarr_sonarr_syncbutton_var"),
-            doc.getElementById("UNIT3DToSonarr_sonarr_fetchbutton_var")
-          );
-      },
-    },
     fields: {
       sonarr_url: {
         label: "Sonarr URL",
@@ -138,6 +117,33 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         click: fetchQualityProfiles,
       },
     },
+    events: {
+      open: function (doc) {
+        const enableAuth = GM_config.fields.enableAuth.node;
+        toggleAuthFields(enableAuth.checked);
+        enableAuth.addEventListener("change", function () {
+          toggleAuthFields(enableAuth.checked);
+        });
+
+        let style = this.frame.style;
+        style.width = "400px";
+        style.height = "515px";
+        style.inset = "";
+        style.top = "6%";
+        style.right = "6%";
+        doc
+          .getElementById("UNIT3DToSonarr_buttons_holder")
+          .prepend(
+            doc.getElementById("UNIT3DToSonarr_sonarr_syncbutton_var"),
+            doc.getElementById("UNIT3DToSonarr_sonarr_fetchbutton_var")
+          );
+      },
+      save: function () {
+        console.log("Save event triggered");
+        getMainVars();
+        alert("Settings Saved!");
+      },
+    },
   });
 
   function toggleAuthFields(isAuthEnabled) {
@@ -149,25 +155,42 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
 
   GM.registerMenuCommand("UNIT3DToSonarr Settings", () => GM_config.open());
 
-  // Constant variables based on GM_config settings used across functions.
-  const sonarr_apikey = GM_config.get("sonarr_apikey");
-  const enableAuth = GM_config.get("enableAuth");
-  const username = GM_config.get("username");
-  const password = GM_config.get("password");
-  const monitored = GM_config.get("sonarr_monitored");
-  const sonarrUrl = GM_config.get("sonarr_url").replace(/\/$/, "");
-  const qualityProfile = GM_config.get("sonarr_profileid");
-  const rootPath = GM_config.get("sonarr_rootfolderpath");
-  const searchOnAdd = GM_config.get("sonarr_searchforseries");
-  const headers = {
-    "X-Api-Key": sonarr_apikey,
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  };
-  // Add basic auth to the headers if enabled.
-  if (enableAuth) {
-    headers["Authorization"] = "Basic " + btoa(username + ":" + password);
+  let sonarr_apikey,
+    enableAuth,
+    username,
+    password,
+    monitored,
+    sonarrUrl,
+    qualityProfile,
+    rootPath,
+    searchOnAdd,
+    headers;
+
+  // Function to set global MainVars
+  function getMainVars() {
+    // Constant variables based on GM_config settings used across functions.
+    sonarr_apikey = GM_config.get("sonarr_apikey");
+    enableAuth = GM_config.get("enableAuth");
+    username = GM_config.get("username");
+    password = GM_config.get("password");
+    monitored = GM_config.get("sonarr_monitored");
+    sonarrUrl = GM_config.get("sonarr_url").replace(/\/$/, "");
+    qualityProfile = GM_config.get("sonarr_profileid");
+    rootPath = GM_config.get("sonarr_rootfolderpath");
+    searchOnAdd = GM_config.get("sonarr_searchforseries");
+    headers = {
+      "X-Api-Key": sonarr_apikey,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    // Add basic auth to the headers if enabled.
+    if (enableAuth) {
+      headers["Authorization"] = "Basic " + btoa(username + ":" + password);
+    }
   }
+
+  // Call the function to set the MainVars
+  getMainVars();
 
   let current_page_type = "";
   let oldSelection = undefined;
@@ -539,7 +562,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     })
       .then((response) => {
         const responseJSON = JSON.parse(response.responseText);
-        if (responseJSON.status == 200) {
+        if (response.status == 200) {
           GM.setValue("existing_seriess", JSON.stringify(responseJSON));
           console.log(responseJSON);
           let timestamp = +new Date();
