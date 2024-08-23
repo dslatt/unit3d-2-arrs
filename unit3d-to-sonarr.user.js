@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         UNIT3D-to-Sonarr
-// @version      0.2
+// @version      0.2.1
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send series to sonarr from UNIT3D trackers
