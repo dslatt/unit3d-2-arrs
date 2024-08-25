@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         UNIT3D-to-Radarr
-// @version      0.2
+// @version      0.2.1
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send movies to radarr from UNIT3D trackers
@@ -9,6 +9,7 @@
 // @match        *://aither.cc/*
 // @match        *://blutopia.cc/*
 // @match        *://reelflix.xyz/*
+// @match        *://utp.to/* 
 // @updateURL    https://github.com/frenchcutgreenbean/unit3d-2-arrs/raw/main/unit3d-to-radarr.user.js
 // @downloadURL  https://github.com/frenchcutgreenbean/unit3d-2-arrs/raw/main/unit3d-to-radarr.user.js
 // @require      https://cdn.jsdelivr.net/gh/sizzlemctwizzle/GM_config@43fd0fe4de1166f343883511e53546e87840aeaf/gm_config.js
