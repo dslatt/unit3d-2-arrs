@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         UNIT3D-to-Radarr
-// @version      0.2.1
+// @version      0.2.2
 // @author       dantayy
 // @namespace    https://github.com/frenchcutgreenbean/
 // @description  Send movies to radarr from UNIT3D trackers
@@ -33,7 +33,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
 /*jshint esversion: 11 */
 (function () {
   "use strict";
-  const icon = "https://svgshare.com/i/16iY.svg";
+  const icon = "https://raw.githubusercontent.com/walkxcode/dashboard-icons/refs/heads/main/svg/radarr.svg";
 
   GM_config.init({
     id: "UNIT3DToRadarr",
@@ -203,12 +203,11 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
   const isSimilar = window.location.href.includes("similar");
   const isRequest = window.location.href.includes("request");
 
-  // So it is still "multi" on similar page.
-  if (document.querySelector("section.meta") && !isSimilar && !isRequest) {
+  if (document.querySelector("section.meta") && !isRequest) {
     current_page_type = "singletorrent";
   } else if (document.querySelector("section.meta") && isRequest) {
     current_page_type = "request";
-  } else if (isSimilar || window.location.href.includes("torrent")) {
+  } else if (window.location.href.includes("torrent")) {
     current_page_type = "multi";
   }
   if (current_page_type) {
@@ -257,7 +256,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     }
     if (current_page_type == "singletorrent") {
       let catSelector = document.querySelector(
-        '[href*="/torrents?categories%5B0%5D="]'
+        '[href*="/torrents/create?category_id="]'
       );
       let category = catSelector.href.match(/=(\d+)/)[1];
       if (category === "1") {
