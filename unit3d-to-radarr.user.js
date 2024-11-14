@@ -689,6 +689,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
   function add_movie(movies, imdbid) {
     movies.monitored = monitored;
     movies.qualityProfileId = qualityProfile;
+    movies.minimumAvailability = 'announced';
     movies.rootFolderPath = rootPath;
     movies.addOptions = {
       searchForMovies: searchOnAdd,
