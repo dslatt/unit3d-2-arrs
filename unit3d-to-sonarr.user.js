@@ -101,6 +101,11 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
         type: "checkbox",
         default: false,
       },
+      sonarr_seasonfolder: {
+        label: "Use Season Folders",
+        type: "checkbox",
+        default: true,
+      },
       sonarr_sync_interval: {
         label: "AutoSync Interval (Minutes)",
         type: "select",
@@ -165,6 +170,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     qualityProfile,
     rootPath,
     searchOnAdd,
+    seasonfolder,
     headers;
 
   // Function to set global MainVars
@@ -175,6 +181,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
     username = GM_config.get("username");
     password = GM_config.get("password");
     monitored = GM_config.get("sonarr_monitored");
+    seasonfolder = GM_config.get("sonarr_seasonfolder");
     sonarrUrl = GM_config.get("sonarr_url").replace(/\/$/, "");
     qualityProfile = GM_config.get("sonarr_profileid");
     rootPath = GM_config.get("sonarr_rootfolderpath");
@@ -683,6 +690,7 @@ All credit to the original authors @ PTP DirtyCajunrice + CatSpinner + Prism16
 
   function add_series(series, imdbid) {
     series.monitored = monitored;
+    series.seasonFolder = seasonfolder;
     series.qualityProfileId = qualityProfile;
     series.rootFolderPath = rootPath;
     series.addOptions = {
